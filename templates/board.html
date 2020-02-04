@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} /{{ board.name }}/ - Free Chan {% endblock %}</title>
+</head>
+<body>
+
+<h1 style="text-align:center;">/{{ board.name }}/</h1>
+<h2 style="text-align:center;">{{ board.description }}</h2>
+
+{% block content %}
+
+    {% for thread_and_last_replies in threads_and_last_replies %}
+        <p>
+            <a href="{% url 'boards:threads' board.name thread_and_last_replies.thread.id %}">{{ thread_and_last_replies.thread.theme }}</a>
+            {{thread_and_last_replies.thread.date}}
+            №{{thread_and_last_replies.thread.id}}
+        </p>
+        <p>{{thread_and_last_replies.thread.message}}</p>
+
+        {% for reply in thread_and_last_replies.replies %}
+            <p>
+                {{ reply.email }}
+                {{ reply.date }}
+                №{{ reply.id }}
+            </p>
+            <p>{{ reply.message }}</p>
+        {% endfor %}
+
+    {% endfor %}
+
+    <form action="{% url 'boards:create_thread' board.name%}" method="post">
+        {% csrf_token %}
+        <input type="text" required placeholder="Тема" name="theme"><br>
+        <textarea name="message" required="" placeholder="Сообщение" cols="30" rows="10"></textarea><br>
+        <button type="submit"> Создать </button>
+
+    </form>
+
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{% block title %} /{{ board.name }}/ - {{thread.theme}} {% endblock %}</title>
+
+<script>
+// function saves scroll position
+function fScroll(val)
+{
+        var hidScroll = document.getElementById('hidScroll');
+        hidScroll.value = val.scrollTop;
+}
+
+// function moves scroll position to saved value
+function fScrollMove(what)
+{
+        var hidScroll = document.getElementById('hidScroll');
+        document.getElementById(what).scrollTop = hidScroll.value;
+}
+
+</script>
+
+</head>
+<body>
+{% block content %}
+
+    <p>
+        <b>{{thread.theme}}</b>
+        {{thread.date}}
+    </p>
+    <p>{{thread.message}}</p>
+
+    <ul>
+        {% for reply in replies %}
+            <li>
+                <p>
+                    <b>{{ reply.email}}</b>
+                    {{ reply.date }}
+                </p>
+                <p>{{ reply.message }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <p>
+        <a href="JavaScript: location.reload(false);"> Обновить </a>
+    </p>
+
+    <form action="{% url 'boards:leave_reply' board.name thread.id %}" method="post">
+        {% csrf_token %}
+        <input type="text" required placeholder="e-mail" name="email"><br>
+        <textarea name="message" required="" placeholder="Комментарий" cols="30" rows="10"></textarea><br>
+        <button type="submit"> Отправить </button>
+
+    </form>
+
+{% endblock %}
+</body>
+</html>

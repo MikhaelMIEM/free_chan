@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} Free Chan {% endblock %}</title>
+</head>
+<body>
+
+<h1 style="text-align:center;">Free Chan</h1>
+<h2 style="text-align:center;">Свободное общение</h2>
+
+{% block content %}
+    <p style="text-align:center;">
+        {% for board in board_list %}
+            <a href="{% url 'boards:boards' board.name %}">/{{ board.name }}/</a>
+        {% endfor %}
+    </p>
+{% endblock %}
+</body>
+</html>
